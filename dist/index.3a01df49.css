@@ -1,0 +1,40 @@
+body {
+  color: #333;
+  background-color: #f5f5f5;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  display: flex;
+}
+
+.container {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 700px;
+  padding: 20px;
+  box-shadow: 0 0 10px #0000001a;
+}
+
+form {
+  gap: 10px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+input, select, button {
+  padding: 10px;
+  font-size: 1em;
+}
+
+#transaction-list {
+  padding: 0;
+  list-style: none;
+}
+
+#transaction-list li {
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+}
+/*# sourceMappingURL=index.3a01df49.css.map */

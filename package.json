@@ -1,0 +1,16 @@
+{
+  "name": "personal-budget-tracker-with-data-visualization",
+  "version": "1.0.0",
+  "description": "A simple web application to help you track your income and expenses, with data visualization using Chart.js. The app uses Firebase Firestore for storing transactions.",
+  "main": "app.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "keywords": [],
+  "author": "Haytham Fourati",
+  "license": "ISC",
+  "dependencies": {
+    "parcel": "^2.13.0"
+  }
+}
