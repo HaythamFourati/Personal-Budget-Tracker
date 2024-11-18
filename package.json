@@ -11,6 +11,7 @@
   "author": "Haytham Fourati",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^4.4.6",
     "parcel": "^2.13.0"
   }
 }
