@@ -34,7 +34,22 @@ input, select, button {
 }
 
 #transaction-list li {
-  border-bottom: 1px solid #ccc;
+  padding: 15px;
+}
+
+#transaction-list li span {
+  border-radius: 6px;
+  margin-right: 20px;
   padding: 10px;
+}
+
+.expense {
+  color: #6d0505;
+  background-color: #ffcaca;
+}
+
+.income {
+  color: #022302;
+  background-color: #caffcb;
 }
 /*# sourceMappingURL=index.3a01df49.css.map */

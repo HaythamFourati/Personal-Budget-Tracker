@@ -3,57 +3,38 @@ const transactionList = document.getElementById("transaction-list");
 const ctx = document.getElementById("myChart").getContext("2d");
 let transactions = [];
 console.log(transactions);
-form.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    // Form Values
+const formSubmission = function() {
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        // Form Values
+        renderTrans();
+        form.reset();
+    });
+};
+const renderTrans = function() {
     const description = document.getElementById("description").value;
     const amount = parseFloat(document.getElementById("amount").value);
     const type = document.getElementById("type").value;
-    // Render Transaction
-    const li = document.createElement("li");
-    li.innerHTML = `${type}: ${description} $${amount} `;
-    transactionList.appendChild(li);
-    // Push The Transaction To the Transactions arr
+    const listEl = `<li><span class=${type === "expense" ? "expense" : "income"}>${type}</span>${description} $${amount}</li> `;
+    transactionList.insertAdjacentHTML("beforeend", listEl);
     const transaction = {
         description,
         amount,
         type
     };
+    localStorage.setItem("trans", JSON.stringify(transactions));
     transactions.push(transaction);
-    console.log(transaction);
-    // Reste Form After Submission
-    form.reset();
-});
+};
+const loadData = function() {
+    const storedTransactions = localStorage.getItem("trans");
+    console.log(storedTransactions);
+//storedTransactions.forEach((tran) => renderTrans(tran));
+};
 // Update chart
-function updateChart() {
-    const income = transactions.filter((t)=>t.type === "income").reduce((acc, t)=>acc + t.amount, 0);
-    const expense = transactions.filter((t)=>t.type === "expense").reduce((acc, t)=>acc + t.amount, 0);
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: [
-                "Income",
-                "Expenses"
-            ],
-            datasets: [
-                {
-                    label: "Budget Overview",
-                    data: [
-                        income,
-                        expense
-                    ],
-                    backgroundColor: [
-                        "#4caf50",
-                        "#f44336"
-                    ]
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+const init = function() {
+    formSubmission();
+    loadData();
+};
+init();
 
 //# sourceMappingURL=index.7c0ccee6.js.map

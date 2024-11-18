@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Budget Tracker</title>
-  <link rel="stylesheet" href="/index.3a01df49.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <div class="container">
-    <h1>Personal Budget Tracker</h1>
-    <form id="transaction-form">
-      <input type="text" id="description" placeholder="Description" required="">
-      <input type="number" id="amount" placeholder="Amount" required="">
-      <select id="type">
-        <option value="income">Income</option>
-        <option value="expense">Expense</option>
-      </select>
-      <button type="submit">Add Transaction</button>
-    </form>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker</title>
+    <link rel="stylesheet" href="/index.3a01df49.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Personal Budget Tracker</h1>
+      <form id="transaction-form">
+        <input type="text" id="description" placeholder="Description" required="">
+        <input type="number" id="amount" placeholder="Amount" required="">
+        <select id="type">
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        <button type="submit">Add Transaction</button>
+      </form>
 
-    <ul id="transaction-list"></ul>
+      <ul id="transaction-list"></ul>
 
-    <canvas id="myChart" width="400" height="200"></canvas>
-  </div>
+      <canvas id="myChart" width="400" max-height="200"></canvas>
+    </div>
 
-  <script src="/index.7c0ccee6.js"></script>
-<script src="/Personal%20Budget%20Tracker%20with%20Data%20Visualization.3464ddca.js"></script></body>
+    <script src="/index.7c0ccee6.js"></script>
+  <script src="/Personal%20Budget%20Tracker%20with%20Data%20Visualization.3464ddca.js"></script></body>
 </html>
