@@ -5,6 +5,13 @@
   padding: 0;
 }
 
+/* Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  line-height: 1.6;
+}
+
 /* General Form Styles */
 form {
   display: flex;
@@ -24,46 +31,6 @@ button {
   min-width: 150px;
 }
 
-/* Transaction List */
-#transaction-list {
-  list-style: none;
-  padding: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 400px; /* Set a fixed maximum height */
-  scrollbar-width: thin; /* Optional: For thin scrollbar (Firefox) */
-}
-
-#transaction-list li {
-  padding: 20px;
-  background-color: #fff;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#transaction-list li span {
-  padding: 10px;
-  border-radius: 6px;
-  margin-right: 10px;
-}
-
-.expense {
-  background-color: #ffcccc;
-  color: #a80000;
-}
-
-.income {
-  background-color: #ccffcc;
-  color: #006600;
-}
-
-/* Body Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  line-height: 1.6;
-}
-
 /* Header */
 .header {
   padding: 40px;
@@ -78,14 +45,9 @@ body {
   justify-content: center;
   background-color: #333;
   color: white;
+  padding: 5px;
+  font-size: larger;
 }
-
-.navbar a {
-  color: #fff;
-  padding: 14px 20px;
-  text-decoration: none;
-}
-
 /* Layout Container */
 .row {
   display: flex;
@@ -98,8 +60,8 @@ body {
 /* Sidebar/Left Column */
 .side {
   flex: 1;
-  min-width: 250px;
-  max-width: 400px;
+  min-width: 350px;
+  max-width: 500px;
   background-color: #f1f1f1;
   padding: 20px;
 }
@@ -111,6 +73,51 @@ body {
   max-width: 800px;
   background-color: #fff;
   padding: 20px;
+}
+
+/* Transaction List */
+#transaction-list {
+  list-style: none;
+  padding: 10px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 400px; /* Set a fixed maximum height */
+  scrollbar-width: thin; /* Optional: For thin scrollbar (Firefox) */
+}
+
+#transaction-list li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#transaction-list li span {
+  padding: 10px;
+  border-radius: 6px;
+  margin-right: 10px;
+}
+
+#transaction-list li .close {
+  background-color: #fe3d3d;
+  color: white;
+  font-size: 10px;
+  transform: translateX(20px);
+  cursor: pointer;
+}
+
+.expense {
+  background-color: #ffcccc;
+  color: #a80000;
+}
+
+.income {
+  background-color: #ccffcc;
+  color: #006600;
 }
 
 /* Chart */
