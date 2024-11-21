@@ -2,12 +2,16 @@
 
 A web application for tracking personal finances with data visualization capabilities.
 
+## Live Demo
+Check out the live demo: [Budget Tracker](https://budget-tracker47.netlify.app/)
+
 ## Features
 - Add and manage income/expense transactions
 - Categorize transactions
 - Set and track financial goals
 - Visualize spending patterns with charts
-- Responsive design for mobile and desktop.
+- Responsive design for mobile and desktop
+- Dynamic budget allocation based on monthly income
 
 ## Tech Stack
 - HTML, CSS, JavaScript
@@ -45,13 +49,23 @@ A web application for tracking personal finances with data visualization capabil
   - Categorize as income or expense
   - View transaction history
 - Budget Categories
-  - Pre-defined budget categories
-  - Track spending by category
+  - Dynamic budget allocation based on monthly income
+  - Percentage-based category budgets
+  - Real-time budget tracking
+  - Visual spending indicators
 - Data Visualization
   - Pie chart for expense distribution
   - Line chart for income trends
-  - Bar chart for budget vs actual
-- Local Storage
+  - Bar chart for daily expenses
+- Goal Tracking
+  - Set and monitor financial goals
+  - Track progress with visual indicators
+- Daily Expense Tracking
+  - 30-day expense overview
+  - Daily breakdown of spending
+  - Trend analysis
+
+## Local Storage
   - Persistent data storage
   - No account required
   - Works offline
