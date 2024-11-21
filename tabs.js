@@ -1,18 +1,40 @@
 import Chart from 'chart.js/auto';
 import { getTransactions, getGoals } from './storage.js';
 
-// Constants for budgeting
-export const CATEGORY_BUDGETS = {
-    'Food': 500,
-    'Transport': 200,
-    'Utilities': 300,
-    'Entertainment': 200,
-    'Shopping': 300,
-    'Healthcare': 200,
-    'Other': 200
+// Budget allocation percentages
+const BUDGET_PERCENTAGES = {
+    'Food': 25,        // 25% of income
+    'Transport': 10,   // 10% of income
+    'Utilities': 15,   // 15% of income
+    'Entertainment': 10, // 10% of income
+    'Shopping': 15,    // 15% of income
+    'Healthcare': 10,  // 10% of income
+    'Other': 10        // 10% of income
 };
 
-export const MONTHLY_INCOME = 2000;
+// Calculate category budgets based on total income
+function calculateCategoryBudgets() {
+    const transactions = getTransactions();
+    
+    // Calculate total monthly income
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    
+    const monthlyIncome = transactions
+        .filter(t => {
+            const transactionDate = new Date(t.date);
+            return t.type === 'income' && transactionDate >= firstDayOfMonth;
+        })
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+
+    // Calculate budgets based on percentages of monthly income
+    const budgets = {};
+    Object.entries(BUDGET_PERCENTAGES).forEach(([category, percentage]) => {
+        budgets[category] = (monthlyIncome * (percentage / 100));
+    });
+
+    return budgets;
+}
 
 // Initialize tabs
 export function initializeTabs() {
@@ -55,14 +77,40 @@ function initializeCategories() {
     if (!categoriesContainer) return;
 
     const transactions = getTransactions();
+    const categoryBudgets = calculateCategoryBudgets();
     categoriesContainer.innerHTML = '';
 
-    Object.entries(CATEGORY_BUDGETS).forEach(([category, budget]) => {
+    // Get monthly income for display
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const monthlyIncome = transactions
+        .filter(t => {
+            const transactionDate = new Date(t.date);
+            return t.type === 'income' && transactionDate >= firstDayOfMonth;
+        })
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+
+    // Add monthly income display
+    const incomeCard = document.createElement('div');
+    incomeCard.className = 'income-summary';
+    incomeCard.innerHTML = `
+        <h3>Monthly Income</h3>
+        <p class="amount">$${monthlyIncome.toFixed(2)}</p>
+        <p class="note">Category budgets are calculated as percentages of monthly income</p>
+    `;
+    categoriesContainer.appendChild(incomeCard);
+
+    Object.entries(categoryBudgets).forEach(([category, budget]) => {
         const spent = transactions
-            .filter(t => t.category === category && t.type === 'expense')
-            .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+            .filter(t => {
+                const transactionDate = new Date(t.date);
+                return t.category === category && 
+                       t.type === 'expense' && 
+                       transactionDate >= firstDayOfMonth;
+            })
+            .reduce((sum, t) => sum + Math.abs(parseFloat(t.amount)), 0);
         
-        const percentage = (spent / budget) * 100;
+        const percentage = budget > 0 ? (spent / budget) * 100 : 0;
         const remaining = budget - spent;
 
         const categoryCard = document.createElement('div');
@@ -71,7 +119,7 @@ function initializeCategories() {
         categoryCard.innerHTML = `
             <h3>${category}</h3>
             <div class="budget-info">
-                <span>Budget: $${budget}</span>
+                <span>Budget: $${budget.toFixed(2)} (${BUDGET_PERCENTAGES[category]}% of income)</span>
                 <span>Spent: $${spent.toFixed(2)}</span>
             </div>
             <div class="progress-bar">

@@ -605,6 +605,7 @@ function initializeApp() {
         // Update date text
         updateDateText();
         updateCurrentDate();
+        updateDailyExpensesDisplays();
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('Failed to initialize the application.');
@@ -674,10 +675,75 @@ function renderTransactions(transactions) {
         transactionsList.appendChild(row);
     });
 }
+// Initialize daily expenses chart
+function initializeDailyExpensesChart() {
+    const ctx = document.getElementById('dailyExpensesChart').getContext('2d');
+    const chartData = (0, _storageJs.getDailyExpensesForChart)();
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.labels.map((date)=>new Date(date).toLocaleDateString()),
+            datasets: [
+                {
+                    label: 'Daily Expenses',
+                    data: chartData.data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount ($)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            }
+        }
+    });
+}
+// Update daily totals list
+function updateDailyTotalsList() {
+    const dailyTotalsList = document.getElementById('dailyTotalsList');
+    const dailyExpenses = (0, _storageJs.getDailyExpenses)();
+    const html = Object.entries(dailyExpenses).sort((a, b)=>new Date(b[0]) - new Date(a[0])).map(([date, amount])=>`
+            <div class="daily-total-item">
+                <span class="date">${new Date(date).toLocaleDateString()}</span>
+                <span class="amount">$${amount.toFixed(2)}</span>
+            </div>
+        `).join('');
+    dailyTotalsList.innerHTML = html;
+}
+// Update daily expenses summary
+function updateDailyExpensesSummary() {
+    const thirtyDayTotalElement = document.getElementById('thirtyDayTotal');
+    const dailyAverageElement = document.getElementById('dailyAverage');
+    const total = (0, _storageJs.getThirtyDayTotal)();
+    const average = (0, _storageJs.getDailyAverage)();
+    thirtyDayTotalElement.textContent = `$${total.toFixed(2)}`;
+    dailyAverageElement.textContent = `$${average.toFixed(2)}`;
+}
+// Update all daily expenses displays
+function updateDailyExpensesDisplays() {
+    initializeDailyExpensesChart();
+    updateDailyTotalsList();
+    updateDailyExpensesSummary();
+}
 // Setup event listeners
 function setupEventListeners() {
     // Transaction form submit
-    if (transactionForm) transactionForm.addEventListener('submit', (e)=>{
+    if (transactionForm) transactionForm.addEventListener('submit', async (e)=>{
         e.preventDefault();
         const transaction = {
             id: Date.now().toString(),
@@ -693,6 +759,7 @@ function setupEventListeners() {
             (0, _storageJs.saveTransaction)(transaction);
             loadTransactions();
             transactionForm.reset();
+            updateDailyExpensesDisplays();
         } catch (error) {
             console.error('Error saving transaction:', error);
             showError('Failed to save transaction.');
@@ -747,6 +814,10 @@ parcelHelpers.export(exports, "saveGoal", ()=>saveGoal);
 parcelHelpers.export(exports, "updateGoal", ()=>updateGoal);
 parcelHelpers.export(exports, "deleteGoal", ()=>deleteGoal);
 parcelHelpers.export(exports, "clearAllData", ()=>clearAllData);
+parcelHelpers.export(exports, "getDailyExpenses", ()=>getDailyExpenses);
+parcelHelpers.export(exports, "getDailyExpensesForChart", ()=>getDailyExpensesForChart);
+parcelHelpers.export(exports, "getThirtyDayTotal", ()=>getThirtyDayTotal);
+parcelHelpers.export(exports, "getDailyAverage", ()=>getDailyAverage);
 function initializeStorage() {
     // Initialize transactions if not exists
     if (!localStorage.getItem('transactions')) localStorage.setItem('transactions', JSON.stringify([]));
@@ -761,6 +832,8 @@ function getTransactions() {
 // Save transaction
 function saveTransaction(transaction) {
     const transactions = getTransactions();
+    transaction.id = Date.now().toString();
+    transaction.date = new Date().toISOString().split('T')[0]; // Add date in YYYY-MM-DD format
     transactions.push(transaction);
     localStorage.setItem('transactions', JSON.stringify(transactions));
     return transaction;
@@ -824,6 +897,53 @@ function clearAllData() {
     localStorage.removeItem('goals');
     initializeStorage();
 }
+// Get daily expenses for the last 30 days
+function getDailyExpenses() {
+    const transactions = getTransactions();
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+    // Filter transactions for last 30 days and group by date
+    const dailyExpenses = transactions.filter((t)=>{
+        const transactionDate = new Date(t.date);
+        return transactionDate >= thirtyDaysAgo && transactionDate <= today && t.type === 'expense';
+    }).reduce((acc, t)=>{
+        const date = t.date; // Use the stored date directly
+        if (!acc[date]) acc[date] = 0;
+        acc[date] += parseFloat(t.amount);
+        return acc;
+    }, {});
+    return dailyExpenses;
+}
+// Get daily expenses formatted for chart display
+function getDailyExpensesForChart() {
+    const dailyExpenses = getDailyExpenses();
+    const today = new Date();
+    const dates = [];
+    const amounts = [];
+    // Generate all dates for the last 30 days
+    for(let i = 29; i >= 0; i--){
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        dates.push(dateStr);
+        amounts.push(dailyExpenses[dateStr] || 0);
+    }
+    return {
+        labels: dates,
+        data: amounts
+    };
+}
+// Calculate 30-day total expenses
+function getThirtyDayTotal() {
+    const dailyExpenses = getDailyExpenses();
+    return Object.values(dailyExpenses).reduce((total, amount)=>total + amount, 0);
+}
+// Calculate daily average expenses
+function getDailyAverage() {
+    const total = getThirtyDayTotal();
+    return total / 30;
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
@@ -858,23 +978,38 @@ exports.export = function(dest, destName, get) {
 },{}],"eS7re":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "CATEGORY_BUDGETS", ()=>CATEGORY_BUDGETS);
-parcelHelpers.export(exports, "MONTHLY_INCOME", ()=>MONTHLY_INCOME);
 // Initialize tabs
 parcelHelpers.export(exports, "initializeTabs", ()=>initializeTabs);
 var _auto = require("chart.js/auto");
 var _autoDefault = parcelHelpers.interopDefault(_auto);
 var _storageJs = require("./storage.js");
-const CATEGORY_BUDGETS = {
-    'Food': 500,
-    'Transport': 200,
-    'Utilities': 300,
-    'Entertainment': 200,
-    'Shopping': 300,
-    'Healthcare': 200,
-    'Other': 200
+// Budget allocation percentages
+const BUDGET_PERCENTAGES = {
+    'Food': 25,
+    'Transport': 10,
+    'Utilities': 15,
+    'Entertainment': 10,
+    'Shopping': 15,
+    'Healthcare': 10,
+    'Other': 10 // 10% of income
 };
-const MONTHLY_INCOME = 2000;
+// Calculate category budgets based on total income
+function calculateCategoryBudgets() {
+    const transactions = (0, _storageJs.getTransactions)();
+    // Calculate total monthly income
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const monthlyIncome = transactions.filter((t)=>{
+        const transactionDate = new Date(t.date);
+        return t.type === 'income' && transactionDate >= firstDayOfMonth;
+    }).reduce((sum, t)=>sum + parseFloat(t.amount), 0);
+    // Calculate budgets based on percentages of monthly income
+    const budgets = {};
+    Object.entries(BUDGET_PERCENTAGES).forEach(([category, percentage])=>{
+        budgets[category] = monthlyIncome * (percentage / 100);
+    });
+    return budgets;
+}
 function initializeTabs() {
     const tabs = document.querySelectorAll('.nav-tab');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -908,17 +1043,37 @@ function initializeCategories() {
     const categoriesContainer = document.querySelector('.categories-container');
     if (!categoriesContainer) return;
     const transactions = (0, _storageJs.getTransactions)();
+    const categoryBudgets = calculateCategoryBudgets();
     categoriesContainer.innerHTML = '';
-    Object.entries(CATEGORY_BUDGETS).forEach(([category, budget])=>{
-        const spent = transactions.filter((t)=>t.category === category && t.type === 'expense').reduce((sum, t)=>sum + Math.abs(t.amount), 0);
-        const percentage = spent / budget * 100;
+    // Get monthly income for display
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const monthlyIncome = transactions.filter((t)=>{
+        const transactionDate = new Date(t.date);
+        return t.type === 'income' && transactionDate >= firstDayOfMonth;
+    }).reduce((sum, t)=>sum + parseFloat(t.amount), 0);
+    // Add monthly income display
+    const incomeCard = document.createElement('div');
+    incomeCard.className = 'income-summary';
+    incomeCard.innerHTML = `
+        <h3>Monthly Income</h3>
+        <p class="amount">$${monthlyIncome.toFixed(2)}</p>
+        <p class="note">Category budgets are calculated as percentages of monthly income</p>
+    `;
+    categoriesContainer.appendChild(incomeCard);
+    Object.entries(categoryBudgets).forEach(([category, budget])=>{
+        const spent = transactions.filter((t)=>{
+            const transactionDate = new Date(t.date);
+            return t.category === category && t.type === 'expense' && transactionDate >= firstDayOfMonth;
+        }).reduce((sum, t)=>sum + Math.abs(parseFloat(t.amount)), 0);
+        const percentage = budget > 0 ? spent / budget * 100 : 0;
         const remaining = budget - spent;
         const categoryCard = document.createElement('div');
         categoryCard.className = `category-card ${percentage > 90 ? 'warning' : ''} ${percentage > 100 ? 'over' : ''}`;
         categoryCard.innerHTML = `
             <h3>${category}</h3>
             <div class="budget-info">
-                <span>Budget: $${budget}</span>
+                <span>Budget: $${budget.toFixed(2)} (${BUDGET_PERCENTAGES[category]}% of income)</span>
                 <span>Spent: $${spent.toFixed(2)}</span>
             </div>
             <div class="progress-bar">

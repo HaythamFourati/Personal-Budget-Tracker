@@ -23,6 +23,8 @@ function getTransactions() {
 // Save transaction
 function saveTransaction(transaction) {
     const transactions = getTransactions();
+    transaction.id = Date.now().toString();
+    transaction.date = new Date().toISOString().split('T')[0]; // Add date in YYYY-MM-DD format
     transactions.push(transaction);
     localStorage.setItem('transactions', JSON.stringify(transactions));
     return transaction;
@@ -92,6 +94,67 @@ function clearAllData() {
     initializeStorage();
 }
 
+// Get daily expenses for the last 30 days
+function getDailyExpenses() {
+    const transactions = getTransactions();
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+
+    // Filter transactions for last 30 days and group by date
+    const dailyExpenses = transactions
+        .filter(t => {
+            const transactionDate = new Date(t.date);
+            return transactionDate >= thirtyDaysAgo && 
+                   transactionDate <= today && 
+                   t.type === 'expense';
+        })
+        .reduce((acc, t) => {
+            const date = t.date; // Use the stored date directly
+            if (!acc[date]) {
+                acc[date] = 0;
+            }
+            acc[date] += parseFloat(t.amount);
+            return acc;
+        }, {});
+
+    return dailyExpenses;
+}
+
+// Get daily expenses formatted for chart display
+function getDailyExpensesForChart() {
+    const dailyExpenses = getDailyExpenses();
+    const today = new Date();
+    const dates = [];
+    const amounts = [];
+
+    // Generate all dates for the last 30 days
+    for (let i = 29; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        dates.push(dateStr);
+        amounts.push(dailyExpenses[dateStr] || 0);
+    }
+
+    return {
+        labels: dates,
+        data: amounts
+    };
+}
+
+// Calculate 30-day total expenses
+function getThirtyDayTotal() {
+    const dailyExpenses = getDailyExpenses();
+    return Object.values(dailyExpenses).reduce((total, amount) => total + amount, 0);
+}
+
+// Calculate daily average expenses
+function getDailyAverage() {
+    const total = getThirtyDayTotal();
+    return total / 30;
+}
+
 export {
     initializeStorage,
     getTransactions,
@@ -101,5 +164,9 @@ export {
     saveGoal,
     updateGoal,
     deleteGoal,
-    clearAllData
+    clearAllData,
+    getDailyExpenses,
+    getDailyExpensesForChart,
+    getThirtyDayTotal,
+    getDailyAverage
 };

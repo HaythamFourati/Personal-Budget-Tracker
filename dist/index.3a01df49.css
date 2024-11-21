@@ -128,6 +128,106 @@ body {
   flex: 1;
 }
 
+.daily-expenses-container {
+  padding: 20px;
+}
+
+.daily-summary {
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.summary-item {
+  border-bottom: 1px solid #e9ecef;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 5px 0;
+  display: flex;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-item .label {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.summary-item .amount {
+  color: #212529;
+  font-weight: 600;
+}
+
+.chart-section {
+  background-color: #fff;
+  border-radius: 8px;
+  margin: 30px 0;
+  padding: 20px;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.daily-totals-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.daily-total-item {
+  border-bottom: 1px solid #e9ecef;
+  justify-content: space-between;
+  padding: 10px;
+  display: flex;
+}
+
+.daily-total-item:last-child {
+  border-bottom: none;
+}
+
+.daily-total-item .date {
+  color: #495057;
+}
+
+.daily-total-item .amount {
+  color: #212529;
+  font-weight: 500;
+}
+
+.income-summary {
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
+.income-summary h3 {
+  color: #2c3e50;
+  margin-bottom: .5rem;
+}
+
+.income-summary .amount {
+  color: #27ae60;
+  margin: .5rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.income-summary .note {
+  color: #666;
+  margin-top: .5rem;
+  font-size: .9rem;
+}
+
 .transactions-container {
   grid-template-columns: 350px 1fr;
   align-items: start;

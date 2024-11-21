@@ -149,7 +149,141 @@ body {
     /* Style for daily transactions list */
 }
 
+/* Daily Expenses Styles */
+.daily-expenses-container {
+    padding: 20px;
+}
 
+.daily-summary {
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item .label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.summary-item .amount {
+    font-weight: 600;
+    color: #212529;
+}
+
+.chart-section {
+    margin: 30px 0;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.daily-totals-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.daily-total-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.daily-total-item:last-child {
+    border-bottom: none;
+}
+
+.daily-total-item .date {
+    color: #495057;
+}
+
+.daily-total-item .amount {
+    font-weight: 500;
+    color: #212529;
+}
+
+/* Categories styles */
+.categories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.income-summary {
+    grid-column: 1 / -1;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.income-summary h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.income-summary .amount {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #27ae60;
+    margin: 0.5rem 0;
+}
+
+.income-summary .note {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.category-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.budget-info {
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.progress {
+    height: 100%;
+    background: var(--accent-color);
+    transition: var(--transition);
+}
 
 /* Transactions Container */
 .transactions-container {

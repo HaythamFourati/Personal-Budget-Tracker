@@ -26,6 +26,7 @@
         <button class="nav-tab" data-tab="categories">Categories</button>
         <button class="nav-tab" data-tab="goals">Goals</button>
         <button class="nav-tab" data-tab="analytics">Analytics</button>
+        <button class="nav-tab" data-tab="daily-expenses">Daily Expenses</button>
       </div>
     </div>
 
@@ -172,6 +173,38 @@
           </div>
           <div class="chart-wrapper">
             <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Expenses Tab -->
+      <div id="daily-expenses" class="tab-content">
+        <div class="daily-expenses-container">
+          <h2>Daily Expenses Tracker</h2>
+          <div class="daily-summary">
+            <div class="summary-card">
+              <h3>30-Day Overview</h3>
+              <div class="summary-item">
+                <span class="label">Total Expenses:</span>
+                <span class="amount" id="thirtyDayTotal">$0.00</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Daily Average:</span>
+                <span class="amount" id="dailyAverage">$0.00</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-section">
+            <h3>30-Day Expense Trend</h3>
+            <div class="chart-container">
+              <canvas id="dailyExpensesChart"></canvas>
+            </div>
+          </div>
+          <div class="daily-totals-section">
+            <h3>Daily Breakdown</h3>
+            <div class="daily-totals-list" id="dailyTotalsList">
+              <!-- Daily totals will be populated here by JavaScript -->
+            </div>
           </div>
         </div>
       </div>

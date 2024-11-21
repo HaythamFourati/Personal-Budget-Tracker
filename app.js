@@ -5,7 +5,11 @@ import {
     saveTransaction,
     deleteTransaction,
     getGoals,
-    saveGoal 
+    saveGoal,
+    getDailyExpenses,
+    getDailyExpensesForChart,
+    getThirtyDayTotal,
+    getDailyAverage 
 } from './storage.js';
 import { initializeTabs } from './tabs.js';
 
@@ -30,6 +34,7 @@ function initializeApp() {
         // Update date text
         updateDateText();
         updateCurrentDate();
+        updateDailyExpensesDisplays();
     } catch (error) {
         console.error('Error initializing app:', error);
         showError('Failed to initialize the application.');
@@ -110,11 +115,85 @@ function renderTransactions(transactions) {
         });
 }
 
+// Initialize daily expenses chart
+function initializeDailyExpensesChart() {
+    const ctx = document.getElementById('dailyExpensesChart').getContext('2d');
+    const chartData = getDailyExpensesForChart();
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.labels.map(date => new Date(date).toLocaleDateString()),
+            datasets: [{
+                label: 'Daily Expenses',
+                data: chartData.data,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount ($)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Update daily totals list
+function updateDailyTotalsList() {
+    const dailyTotalsList = document.getElementById('dailyTotalsList');
+    const dailyExpenses = getDailyExpenses();
+    
+    const html = Object.entries(dailyExpenses)
+        .sort((a, b) => new Date(b[0]) - new Date(a[0]))
+        .map(([date, amount]) => `
+            <div class="daily-total-item">
+                <span class="date">${new Date(date).toLocaleDateString()}</span>
+                <span class="amount">$${amount.toFixed(2)}</span>
+            </div>
+        `).join('');
+    
+    dailyTotalsList.innerHTML = html;
+}
+
+// Update daily expenses summary
+function updateDailyExpensesSummary() {
+    const thirtyDayTotalElement = document.getElementById('thirtyDayTotal');
+    const dailyAverageElement = document.getElementById('dailyAverage');
+    
+    const total = getThirtyDayTotal();
+    const average = getDailyAverage();
+    
+    thirtyDayTotalElement.textContent = `$${total.toFixed(2)}`;
+    dailyAverageElement.textContent = `$${average.toFixed(2)}`;
+}
+
+// Update all daily expenses displays
+function updateDailyExpensesDisplays() {
+    initializeDailyExpensesChart();
+    updateDailyTotalsList();
+    updateDailyExpensesSummary();
+}
+
 // Setup event listeners
 function setupEventListeners() {
     // Transaction form submit
     if (transactionForm) {
-        transactionForm.addEventListener('submit', (e) => {
+        transactionForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const transaction = {
@@ -135,6 +214,7 @@ function setupEventListeners() {
                 saveTransaction(transaction);
                 loadTransactions();
                 transactionForm.reset();
+                updateDailyExpensesDisplays();
             } catch (error) {
                 console.error('Error saving transaction:', error);
                 showError('Failed to save transaction.');
