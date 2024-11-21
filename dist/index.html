@@ -1,52 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Tracker</title>
+    <title>Personal Budget Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/index.3a01df49.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-  <body>
+</head>
+<body>
     <!-- Header -->
-    <div class="header">
-      <h1>Personal Budgeting App</h1>
-      <p>Data Visualization With <b>Charts Js library</b></p>
-    </div>
+    <header class="header">
+      <div class="header-content">
+        <h1>Personal Budget Tracker</h1>
+        <div class="current-date" id="currentDate"></div>
+      </div>
+    </header>
 
     <!-- Navigation Bar -->
     <div class="navbar">
-      <p id="date-text"></p>
-    </div>
-
-    <!-- The flexible grid (content) -->
-    <div class="row">
-      <div class="side">
-        <h2>Add Your Transactions Below</h2>
-        <form id="transaction-form">
-          <input type="text" id="description" placeholder="Description" required="">
-          <input type="number" id="amount" placeholder="Amount" required="">
-          <select id="type">
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
-          <button type="submit">Add Transaction</button>
-        </form>
-
-        <ul id="transaction-list"></ul>
-      </div>
-      <div class="main">
-        <h2>Data Visualization</h2>
-        <canvas id="myChart"></canvas>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-tab="transactions">Transactions</button>
+        <button class="nav-tab" data-tab="categories">Categories</button>
+        <button class="nav-tab" data-tab="goals">Goals</button>
+        <button class="nav-tab" data-tab="analytics">Analytics</button>
       </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-      <h4>Personal Budgeting App Project</h4>
-      <p>A learning project to use Charts Js library</p>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Transactions Tab -->
+      <div id="transactions" class="tab-content active">
+        <div class="transactions-container">
+
+         <!-- History Tab -->
+<div id="history" class="tab-content">
+  <div class="history-container">
+      <div class="history-header">
+          <h2>30-Day Transaction History</h2>
+          <div class="history-summary">
+              <div class="summary-item">
+                  <span class="label">Total Income:</span>
+                  <span class="amount income" id="historyTotalIncome">$0.00</span>
+              </div>
+              <div class="summary-item">
+                  <span class="label">Total Expenses:</span>
+                  <span class="amount expense" id="historyTotalExpenses">$0.00</span>
+              </div>
+              <div class="summary-item">
+                  <span class="label">Net Balance:</span>
+                  <span class="amount" id="historyNetBalance">$0.00</span>
+              </div>
+          </div>
+      </div>
+      <div class="daily-transactions">
+          <!-- Daily transactions will be populated here -->
+      </div>
+  </div>
+</div> 
+          <div class="form-section">
+            <div class="form">
+                <h2>Add Transaction</h2>
+                <form id="transactionForm">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <select id="type" required="">
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" required="">
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit">Add Transaction</button>
+                </form>
+            </div>
+          </div>
+
+          <div class="list-section">
+            <div class="transactions">
+                <h2>Recent Transactions</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsList">
+                        <!-- Transactions will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Tab -->
+      <div id="categories" class="tab-content">
+        <div class="categories-container">
+          <!-- Category cards will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Goals Tab -->
+      <div id="goals" class="tab-content">
+        <div class="goals-container">
+          <div class="goals-form-section">
+            <div class="form">
+              <h2>Add Financial Goal</h2>
+              <form id="goalForm">
+                <div class="form-group">
+                  <label for="goalName">Goal Name</label>
+                  <input type="text" id="goalName" required="">
+                </div>
+                <div class="form-group">
+                  <label for="targetAmount">Target Amount</label>
+                  <input type="number" id="targetAmount" required="">
+                </div>
+                <div class="form-group">
+                  <label for="currentAmount">Current Amount</label>
+                  <input type="number" id="currentAmount" required="">
+                </div>
+                <div class="form-group">
+                  <label for="targetDate">Target Date</label>
+                  <input type="date" id="targetDate" required="">
+                </div>
+                <button type="submit">Add Goal</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="goals-list-section">
+            <div class="goals-list">
+              <h2>Your Financial Goals</h2>
+              <div id="goalsList" class="goals-grid">
+                <!-- Goals will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div id="analytics" class="tab-content">
+        <div class="charts-container">
+          <div class="chart-wrapper">
+            <canvas id="expenseChart"></canvas>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script src="/index.7c0ccee6.js"></script>
-  <script src="/Personal%20Budget%20Tracker%20with%20Data%20Visualization.3464ddca.js"></script></body>
+    <footer class="footer">
+      <div class="footer-content">
+        <p>&copy; 2024 Personal Budget Tracker. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- App Scripts -->
+    <script src="/index.5baa4167.js" defer=""></script>
+</body>
 </html>

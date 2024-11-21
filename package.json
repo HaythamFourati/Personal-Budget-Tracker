@@ -1,17 +1,31 @@
 {
-  "name": "personal-budget-tracker-with-data-visualization",
+  "name": "personal-budget-tracker",
   "version": "1.0.0",
-  "description": "A simple web application to help you track your income and expenses, with data visualization using Chart.js. The app uses Firebase Firestore for storing transactions.",
-  "main": "app.js",
+  "description": "A personal budget tracking application with data visualization",
+  "source": "index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html --dist-dir ./dist"
+    "start": "parcel serve index.html --open",
+    "build": "parcel build index.html --dist-dir ./dist",
+    "clean": "rimraf dist .parcel-cache node_modules"
   },
-  "keywords": [],
-  "author": "Haytham Fourati",
-  "license": "ISC",
+  "keywords": [
+    "budget",
+    "finance",
+    "tracking",
+    "visualization"
+  ],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "chart.js": "^4.4.6",
-    "parcel": "^2.13.0"
+    "chart.js": "^4.4.1"
+  },
+  "devDependencies": {
+    "@parcel/config-default": "^2.11.0",
+    "@parcel/core": "^2.11.0",
+    "@parcel/transformer-js": "^2.11.0",
+    "parcel": "^2.11.0",
+    "process": "^0.11.10",
+    "rimraf": "^5.0.5"
   }
 }

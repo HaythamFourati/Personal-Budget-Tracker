@@ -1,34 +1,57 @@
-# Personal Budget Tracker with Data Visualization
+# Personal Budget Tracker
 
-A simple web application to help you track your income and expenses, with data visualization using Chart.js. The app uses Firebase Firestore for storing transactions.
+A web application for tracking personal finances with data visualization capabilities.
 
 ## Features
-- Add, edit, and delete transactions.
-- View income and expenses in a bar chart.
-- Real-time updates using Firebase Firestore.
+- Add and manage income/expense transactions
+- Categorize transactions
+- Set and track financial goals
+- Visualize spending patterns with charts
 - Responsive design for mobile and desktop.
 
 ## Tech Stack
 - HTML, CSS, JavaScript
 - Chart.js for data visualization
-- Firebase Firestore for backend storage
+- Local Storage for backend storage
+- Parcel for bundling and development
 
 ## Setup Instructions
-1. Clone the repository:
-2. Open the project folder:
-3. Replace the Firebase configuration in `app.js` with your own Firebase project config.
-4. Open `index.html` in your browser to run the application.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+4. Open your browser and navigate to `http://localhost:1234`
 
-## Firebase Setup
-- Go to [Firebase Console](https://console.firebase.google.com/).
-- Create a new project.
-- Enable Firestore Database.
-- Replace the Firebase configuration in `app.js`.
+## Development
+- The app uses local storage to persist data
+- Chart.js is used for data visualization
+- Parcel handles bundling and development server
 
-## Future Enhancements
-- Add user authentication for personalized data.
-- Include a pie chart for category-based expenses.
-- Add export functionality (CSV download).
+## Project Structure
+- `index.html` - Main HTML file
+- `style.css` - Styles
+- `app.js` - Main application logic
+- `storage.js` - Local storage management
+- `tabs.js` - Tab management and charts
 
-## Contributing
-Feel free to fork the project and submit pull requests. Any feedback or suggestions are welcome!
+## Features
+- Transaction Management
+  - Add/delete transactions
+  - Categorize as income or expense
+  - View transaction history
+- Budget Categories
+  - Pre-defined budget categories
+  - Track spending by category
+- Data Visualization
+  - Pie chart for expense distribution
+  - Line chart for income trends
+  - Bar chart for budget vs actual
+- Local Storage
+  - Persistent data storage
+  - No account required
+  - Works offline

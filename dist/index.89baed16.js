@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"9zv6X":[function(require,module,exports,__globalThis) {
+})({"kncE4":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "0907ca6d3464ddca";
+module.bundle.HMR_BUNDLE_ID = "f007209789baed16";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -584,8 +584,120 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"j4kuM":[function(require,module,exports,__globalThis) {
+},{}],"dBiHI":[function(require,module,exports,__globalThis) {
+// Your web app's Firebase configuration
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// Export only the initialize function
+parcelHelpers.export(exports, "initializeFirebase", ()=>initializeFirebase);
+const firebaseConfig = {
+    apiKey: "AIzaSyAOt4AirAHAYVJxn7mT64dQjaIual636hs",
+    authDomain: "personal-budgeting-app-ea761.firebaseapp.com",
+    projectId: "personal-budgeting-app-ea761",
+    storageBucket: "personal-budgeting-app-ea761.appspot.com",
+    messagingSenderId: "280655728893",
+    appId: "1:280655728893:web:5faa07f2d2b0c00289ae94",
+    measurementId: "G-EXC06LVXL6"
+};
+// Clear IndexedDB data
+async function clearIndexedDB() {
+    const databases = await window.indexedDB.databases();
+    databases.forEach((db)=>{
+        window.indexedDB.deleteDatabase(db.name);
+    });
+    return new Promise((resolve)=>setTimeout(resolve, 1000)); // Wait for deletion to complete
+}
+// Wait for Firebase to be available
+function waitForFirebase() {
+    return new Promise((resolve)=>{
+        if (typeof window.firebase !== 'undefined') resolve();
+        else {
+            const checkFirebase = setInterval(()=>{
+                if (typeof window.firebase !== 'undefined') {
+                    clearInterval(checkFirebase);
+                    resolve();
+                }
+            }, 100);
+        }
+    });
+}
+// Initialize Firebase with fallback to local storage
+async function initializeFirebase() {
+    try {
+        // Clear IndexedDB first
+        await clearIndexedDB();
+        // Wait for Firebase to be available
+        await waitForFirebase();
+        // Initialize Firebase if not already initialized
+        if (!window.firebase.apps?.length) window.firebase.initializeApp(firebaseConfig);
+        // Get Firebase services
+        const auth = window.firebase.auth();
+        const db = window.firebase.firestore();
+        // Export the initialized services
+        window.db = db;
+        window.auth = auth;
+        window.transactionsCol = db.collection('transactions');
+        window.goalsCol = db.collection('goals');
+        // Try to enable offline persistence
+        try {
+            await db.enablePersistence({
+                synchronizeTabs: true
+            });
+            console.log('Offline persistence enabled');
+        } catch (err) {
+            if (err.code === 'failed-precondition') console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+            else if (err.code === 'unimplemented') console.log('The current browser does not support persistence.');
+        }
+        // Try to sign in anonymously
+        try {
+            if (!auth.currentUser) {
+                await auth.signInAnonymously();
+                console.log('Signed in anonymously');
+            }
+        } catch (authError) {
+            console.log('Anonymous sign-in failed, continuing in local mode:', authError);
+            window.localStorage.setItem('usingLocalStorage', 'true');
+        }
+        return true;
+    } catch (error) {
+        console.error('Error initializing Firebase:', error);
+        // Fallback to local storage if Firebase fails
+        console.log('Falling back to local storage mode');
+        window.localStorage.setItem('usingLocalStorage', 'true');
+        return true; // Return true to allow app to continue
+    }
+}
 
-},{}]},["9zv6X","j4kuM"], "j4kuM", "parcelRequire94c2")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports,__globalThis) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
-//# sourceMappingURL=Personal Budget Tracker with Data Visualization.3464ddca.js.map
+},{}]},["kncE4","dBiHI"], "dBiHI", "parcelRequire94c2")
+
+//# sourceMappingURL=index.89baed16.js.map
